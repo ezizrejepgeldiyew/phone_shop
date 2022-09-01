@@ -36,27 +36,23 @@
 
                 <!-- Product details -->
                 <div class="col-md-5">
-                    <div class="product-details">
+
+
+                    <div class="product-details" data-id="{{ $product->id }}">
                         <h2 class="product-name">{{ $product->name }}</h2>
                         <div>
                             <div class="product-rating">
                                 @for ($i = 0; $i < $product->rating; $i++)
-                                <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
                                 @endfor
-                                @for ($i = 0; $i < 5-($product->rating); $i++)
-                                <i class="fa fa-star-o"></i>
+                                @for ($i = 0; $i < 5 - $product->rating; $i++)
+                                    <i class="fa fa-star-o"></i>
                                 @endfor
                             </div>
                             <a class="review-link" href="#">{{ $all }} Review(s)</a>
                         </div>
                         <div>
-                            @isset($product->discount)
-                                <h3 class="product-price">{{ ($product->price / 100) * $product->discount }}TMT <del
-                                        class="product-old-price">{{ $product->price }}TMT</del></h3>
-                            @else
-                                <h3 class="product-price">{{ $product->price }}TMT</h3>
-                            @endisset
-                            <span class="product-available">In Stock</span>
+                                <h3 class="product-price"><span class="pro_price" value="{{ $product->price }}">{{ $product->price}}</span> TMT</h3>
                         </div>
                         <p>{{ $product->description }}</p>
 
@@ -65,31 +61,24 @@
                                 Color
                                 <select class="input-select">
                                     @foreach (json_decode($product->colors) as $item)
-                                    <option value="0">{{ $item }}</option>
+                                        <option value="0">{{ $item }}</option>
                                     @endforeach
                                 </select>
                             </label>
-                            <label>
+                            <label class="pro_qty">
                                 Qty
-                                <div class="input-number">
-                                    <input type="number" value="0">
-                                    <span class="qty-up">+</span>
-                                    <span class="qty-down">-</span>
-                                </div>
+                                <input type="number" value="{{ $cart }}" class="form-control quantity update-cart" />
                             </label>
                         </div>
 
                         <div class="add-to-cart">
 
-                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                            <button class="add-to-cart-btn addtocart"><i class="fa fa-shopping-cart"></i> add to cart</button>
                         </div>
-
                         <ul class="product-btns">
                             <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
                             <li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
                         </ul>
-
-
                         <ul class="product-links">
                             <li>Share:</li>
                             <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -97,11 +86,8 @@
                             <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
                             <li><a href="#"><i class="fa fa-envelope"></i></a></li>
                         </ul>
-
                     </div>
                 </div>
-                <!-- /Product details -->
-
                 <!-- Product tab -->
                 <div class="col-md-12">
                     <div id="product-tab">
@@ -123,7 +109,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /tab1  -->
 
                             <!-- tab2  -->
                             <div id="tab2" class="tab-pane fade in">
@@ -138,7 +123,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /tab2  -->
 
                             <!-- tab3  -->
                             <div id="tab3" class="tab-pane fade in">
@@ -150,10 +134,10 @@
                                                 <span>{{ $product->rating }}</span>
                                                 <div class="rating-stars">
                                                     @for ($i = 0; $i < $product->rating; $i++)
-                                                    <i class="fa fa-star"></i>
+                                                        <i class="fa fa-star"></i>
                                                     @endfor
-                                                    @for ($i = 0; $i < 5-($product->rating); $i++)
-                                                    <i class="fa fa-star-o"></i>
+                                                    @for ($i = 0; $i < 5 - $product->rating; $i++)
+                                                        <i class="fa fa-star-o"></i>
                                                     @endfor
                                                 </div>
                                             </div>
@@ -177,7 +161,7 @@
                                                                     $t = 1;
                                                                 @endphp
                                                                 <div class="rating-progress">
-                                                                    <div style="width: {{ (100*$value)/$all }}%;"></div>
+                                                                    <div style="width: {{ (100 * $value) / $all }}%;"></div>
                                                                 </div>
                                                                 <span class="sum">{{ $value }}</span>
                                                             @endif
@@ -194,31 +178,30 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <!-- /Rating -->
 
                                     <!-- Reviews -->
                                     <div class="col-md-6">
                                         <div id="reviews">
                                             @foreach ($review as $item)
-                                            <ul class="reviews">
-                                                <li>
-                                                    <div class="review-heading">
-                                                        <h5 class="name">{{ $item->name }}</h5>
-                                                        <p class="date">{{ $item->created_at }}</p>
-                                                        <div class="review-rating">
-                                                            @for ($i = 0; $i < $item->rating; $i++)
-                                                            <i class="fa fa-star"></i>
-                                                            @endfor
-                                                            @for ($i = 0; $i < 5-($item->rating); $i++)
-                                                            <i class="fa fa-star-o empty"></i>
-                                                            @endfor
+                                                <ul class="reviews">
+                                                    <li>
+                                                        <div class="review-heading">
+                                                            <h5 class="name">{{ $item->name }}</h5>
+                                                            <p class="date">{{ $item->created_at }}</p>
+                                                            <div class="review-rating">
+                                                                @for ($i = 0; $i < $item->rating; $i++)
+                                                                    <i class="fa fa-star"></i>
+                                                                @endfor
+                                                                @for ($i = 0; $i < 5 - $item->rating; $i++)
+                                                                    <i class="fa fa-star-o empty"></i>
+                                                                @endfor
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="review-body">
-                                                        <p>{{$item->discription}}</p>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                                        <div class="review-body">
+                                                            <p>{{ $item->discription }}</p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             @endforeach
 
                                             <ul class="reviews-pagination">
@@ -226,7 +209,6 @@
                                             </ul>
                                         </div>{{ $review->links() }}
                                     </div>
-                                    <!-- /Reviews -->
 
                                     <!-- Review Form -->
                                     <div class="col-md-3">
@@ -235,44 +217,38 @@
                                                 action="{{ route('review', ['product' => $product->id]) }}"
                                                 method="POST">
                                                 @csrf
-                                                <input class="input" type="text" name="name" placeholder="Your Name">
-                                                <input class="input" type="email" name="email" placeholder="Your Email">
-                                                <textarea class="input" name="discription"
-                                                    placeholder="Your Review"></textarea>
+                                                <input class="input" type="text" name="name"
+                                                    placeholder="Your Name">
+                                                <input class="input" type="email" name="email"
+                                                    placeholder="Your Email">
+                                                <textarea class="input" name="discription" placeholder="Your Review"></textarea>
                                                 <div class="input-rating">
                                                     <span>Your Rating: </span>
                                                     <div class="stars">
-                                                        <input id="star5" name="rating" value="5" type="radio"><label
-                                                            for="star5"></label>
-                                                        <input id="star4" name="rating" value="4" type="radio"><label
-                                                            for="star4"></label>
-                                                        <input id="star3" name="rating" value="3" type="radio"><label
-                                                            for="star3"></label>
-                                                        <input id="star2" name="rating" value="2" type="radio"><label
-                                                            for="star2"></label>
-                                                        <input id="star1" name="rating" value="1" type="radio"><label
-                                                            for="star1"></label>
+                                                        <input id="star5" name="rating" value="5"
+                                                            type="radio"><label for="star5"></label>
+                                                        <input id="star4" name="rating" value="4"
+                                                            type="radio"><label for="star4"></label>
+                                                        <input id="star3" name="rating" value="3"
+                                                            type="radio"><label for="star3"></label>
+                                                        <input id="star2" name="rating" value="2"
+                                                            type="radio"><label for="star2"></label>
+                                                        <input id="star1" name="rating" value="1"
+                                                            type="radio"><label for="star1"></label>
                                                     </div>
                                                 </div>
                                                 <button class="primary-btn">Submit</button>
                                             </form>
                                         </div>
                                     </div>
-                                    <!-- /Review Form -->
                                 </div>
                             </div>
-                            <!-- /tab3  -->
                         </div>
-                        <!-- /product tab content  -->
                     </div>
                 </div>
-                <!-- /product tab -->
             </div>
-            <!-- /row -->
         </div>
-        <!-- /container -->
     </div>
-    <!-- /SECTION -->
 
     <!-- Related Products -->
     <div class="section">
@@ -285,12 +261,81 @@
                 </div>
                 @foreach ($products as $item)
                     @if ($item->category_id == $product->category_id)
-                        <div class="col-md-3 col-xs-6"> @include('layouts.product')
+                        <div class="col-md-3 col-xs-6">
+                            @include('layouts.product')
                         </div>
                     @endif
                 @endforeach
             </div>
         </div>
     </div>
+
+   @section('product_scripts')
+   <script>
+    $(".update-cart").change(function(e){
+        e.preventDefault();
+        var ele = $(this);
+        let quantity = $(".pro_qty input").val();
+        let id = ele.parents(".product-details").attr("data-id");
+        let data = {
+            _token : "{{ csrf_token() }}",
+            id : id,
+            quantity : quantity
+        }
+        $.post('{{ route('update.cart') }}', data, function(response1){
+
+            if (response1 == false) {
+                let price = parseInt($(".pro_price").attr("value")) * quantity;
+                $(".pro_price").html(price);
+            }
+
+            let response = response1[0];
+            let new_price = response.price * response.quantity;
+            $(".pro_price").html(new_price);
+
+            let response2 = response1[1];
+                let sum1 = 0
+                let link = "{{ asset('images/') }}"
+                let all_text = ''
+                $.each(response2, function($key, $element) {
+                    sum1++;
+                    text = ''
+                    text += '<div class="product-widget"> <div class="product-img"><img src='+link
+                    text += '/' + $element.image + ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">'+ $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element .quantity + 'x </span> $' + $element.price + '</h4></div></div>'
+                    all_text = text + all_text
+                });
+                $('.cart-list').html(all_text)
+                $(".cart_qty").html(sum1);
+        });
+
+    });
+
+    $(".addtocart").click(function(e){
+        e.preventDefault();
+        var ele = $(this);
+        let data = {
+            _token : "{{ csrf_token() }}",
+            id : ele.parents(".product-details").attr("data-id"),
+            quantity : $(".pro_qty input").val()
+        }
+        $.get('{{ route('add.to.cart') }}', data, function(response){
+            let sum = 0
+                let link = "{{ asset('images/') }}"
+                let all_text = ''
+
+                $.each(response, function($key, $element) {
+                    sum++;
+                    text = ''
+                    text += '<div class="product-widget"> <div class="product-img"><img src='+link
+                    text += '/' + $element.image + ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">'+ $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element .quantity + 'x </span> $' + $element.price + '</h4></div></div>'
+                    all_text = text + all_text
+                });
+                $('.cart-list').html(all_text)
+                $(".cart_qty").html(sum);
+        });
+    })
+   </script>
+   @endsection
+
 
 @endsection

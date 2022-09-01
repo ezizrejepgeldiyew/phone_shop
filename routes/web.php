@@ -20,18 +20,22 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('cart', [IndexController::class, 'cart'])->name('cart');
-Route::get('add-to-cart/{id}', [IndexController::class, 'addToCart'])->name('add.to.cart');
-Route::patch('update-cart', [IndexController::class, 'update'])->name('update.cart');
-Route::delete('remove-from-cart', [IndexController::class, 'remove'])->name('remove.from.cart');
+
 
 
 Route::controller(IndexController::class)->group(function(){
     Route::get('/','index')->name('index');
+    Route::get('checkout','checkout')->name('checkout');
     Route::get('cart','cart')->name('cart');
     Route::get('store','store')->name('store');
     Route::get('product1/{product}','product')->name('product1');
     Route::post('review/{product}','review')->name('review');
+    // CART AJAX
+    Route::get('add-to-cart','addToCart')->name('add.to.cart');
+    Route::post('update-cart','update')->name('update.cart');
+    Route::get('remove-from-cart','remove')->name('remove.from.cart');
+    // WISH AJAX
+    Route::get('add-to-wish/{id}','addToCart')->name('add.to.wish');
 });
 
 

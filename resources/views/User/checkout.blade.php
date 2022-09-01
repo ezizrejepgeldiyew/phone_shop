@@ -111,24 +111,30 @@
 								<div><strong>PRODUCT</strong></div>
 								<div><strong>TOTAL</strong></div>
 							</div>
-							<div class="order-products">
+                            @php
+                                $total = 0;
+                            @endphp
+                            @foreach ((array) session('cart') as $id => $item)
+                            <div class="order-products">
 								<div class="order-col">
-									<div>1x Product Name Goes Here</div>
-									<div>$980.00</div>
-								</div>
-								<div class="order-col">
-									<div>2x Product Name Goes Here</div>
-									<div>$980.00</div>
+									<div>{{ $item['quantity'] }}x Product Name {{ $item['name'] }}</div>
+									<div>{{ $item['price'] * $item['quantity'] }}TMT</div>
+                                    @php
+                                        $total += $item['price'] * $item['quantity'];
+                                    @endphp
 								</div>
 							</div>
+                            @endforeach
 							<div class="order-col">
 								<div>Shiping</div>
 								<div><strong>FREE</strong></div>
 							</div>
 							<div class="order-col">
 								<div><strong>TOTAL</strong></div>
-								<div><strong class="order-total">$2940.00</strong></div>
+								<div><strong class="order-total">{{ $total }}TMT</strong></div>
 							</div>
+
+
 						</div>
 						<div class="payment-method">
 							<div class="input-radio">

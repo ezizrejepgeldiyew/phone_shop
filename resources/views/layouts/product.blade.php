@@ -31,9 +31,7 @@
             @endfor
         </div>
         <div class="product-btns">
-            <input type="hidden" class="wsish_id" value="{{$item->id}}">
-            <button class="add-to-wishlist btn_wish" value="{{ $item->id }}" type="submit"><a @guest
-                    href="{{ route('login') }}" @endguest><i class="fa fa-heart-o"></i></a>
+            <button class="fa fa-heart-o btn_wish" value="{{ $item->id }}" id="result" type="submit"></i>
                 <span class="tooltipp">add to
                     wishlist</span></button>
             <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to
@@ -42,24 +40,53 @@
                         class="fa fa-eye"></i></a><span class="tooltipp">quick view</span></button>
         </div>
     </div>
-    <div class="add-to-cart">
-        <a class="btn btn add-to-cart-btn add" href="{{ route('add.to.cart', $item->id) }}"><i class="fa fa-shopping-cart"></i>
+    <div class="add-to-cart" id="cart{{ $item->id }}" data-id="{{ $item->id }}">
+        <button class="add-to-cart-btn addtocart"><i class="fa fa-shopping-cart"></i>
+            add to
+            cart</button>
+    </div>
+    {{-- <div class="add-to-cart">
+        <a class="btn btn add-to-cart-btn add" href="{{ route('add.to.cart', $item->id) }}"><i
+                class="fa fa-shopping-cart"></i>
             add to
             cart</a>
-    </div>
+    </div> --}}
 </div>
 
+@section('layouts_product_scripts')
+    <script>
+        $(function() {
+            $(".btn_wish").click(function() {
+                let id = $(this).attr("value");
+                $(this).attr("class", "fa fa-heart btn_wish");
 
-@section('scripts')
-<script>
-    $(document).ready(function(){
-        $(.btn_wish).click(function(e){
+            });
+        });
+
+        $(".addtocart").click(function(e) {
             e.preventDefault();
-            var Click = $(this);
-            var wish_id = $(Click).closest('.wishlist').find('.wsish_id').val();
-            console.log(wish.id);
-            document.alert(wish_id);
-        })
-    })
-</script>
+            var ele = $(this);
+            let data = {
+                id: ele.parents("div").attr("data-id"),
+                _token: "{{ csrf_token() }}"
+            }
+
+            $.get('{{ route('add.to.cart') }}', data, function(response) {
+                let sum = 0
+                let link = "{{ asset('images/') }}"
+                let all_text = ''
+
+                $.each(response, function($key, $element) {
+                    sum++;
+                    text = ''
+                    text += '<div class="product-widget"> <div class="product-img"><img src='+link
+                    text += '/' + $element.image + ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">'+ $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element .quantity + 'x </span> $' + $element.price + '</h4></div></div>'
+                    all_text = text + all_text
+                });
+                $('.cart-list').html(all_text)
+                $(".cart_qty").html(sum);
+
+            });
+        });
+    </script>
 @endsection
