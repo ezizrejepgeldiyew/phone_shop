@@ -37,7 +37,8 @@ class IndexController extends Controller
     {
         $category = category::get();
         $ourbrand = ourbrand::get();
-        return view('User.store', compact('category', 'ourbrand'));
+        $product = product::with('category')->get();
+        return view('User.store', compact('category', 'ourbrand','product'));
     }
 
     public function product($id)
@@ -88,77 +89,30 @@ class IndexController extends Controller
         return view('register');
     }
 
+    public function search(Request $request)
+    {
+        $text = $request->input('text');
+        $search = product::where('name','Like',"%$text%")->orwhere('ourbrand_id','Like',"%$text%")->with('category')->get();
+        return response()->json($search,200);
+    }
 
-
-
-
-    public function addToCart()
+    public function category_checkbox()
     {
         $id = request('id');
-        if(empty(request('quantity'))){
-            $quantity = 1;
-        } else {
-            $quantity = request('quantity');
-        }
+        $cart1 = [];
+        if($id == null)
+        {
+            $cart = product::with('category')->get();
+            array_push($cart1,$cart);
+        }else
+        {
+            foreach ($id as $key => $value) {
 
-
-        $product = product::findOrFail($id);
-
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-        } else {
-            $cart[$id] = [
-                "id" => $id,
-                "name" => $product->name,
-                "quantity" => $quantity,
-                "price" => $product->price,
-                "image" => $product->photo
-            ];
-        }
-
-        session()->put('cart', $cart);
-
-        return response()->json($cart,200);
-    }
-
-    public function update(Request $request)
-    {
-        $cart = session()->get("cart");
-        if(empty($cart[$request->id])) {
-            return response()->json(false,200);
-        }
-        if ($request->id && $request->quantity) {
-            $cart = session()->get('cart');
-
-            $cart[$request->id]["quantity"] = $request->quantity;
-            $cart[$request->id]["id"] = $request->id;
-
-            session()->put('cart', $cart);
-            session()->flash('success', 'Cart updated successfully');
-            $cart1 = $cart;
-            return response()->json([
-                $cart[$request->id],
-                $cart1
-            ],200 );
-        }
-
-
-
-    }
-
-    public function remove(Request $request)
-    {
-        $cart = session()->get('cart');
-        if ($request->id) {
-            $cart = session()->get('cart');
-            if (isset($cart[$request->id])) {
-                unset($cart[$request->id]);
-                session()->put('cart', $cart);
+                $cart = product::where('category_id',$value)->with('category')->get();
+                array_push($cart1,$cart);
             }
-            session()->flash('success', 'Product removed successfully');
         }
-        return response()->json($cart,200);
+        return response()->json($cart1,200);
     }
+
 }

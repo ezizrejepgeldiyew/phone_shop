@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OurBrandController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\KuriyentController;
+use App\Http\Controllers\CartJqueryController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -30,11 +31,15 @@ Route::controller(IndexController::class)->group(function(){
     Route::get('store','store')->name('store');
     Route::get('product1/{product}','product')->name('product1');
     Route::post('review/{product}','review')->name('review');
-    // CART AJAX
+    Route::get('search','search')->name('search');
+    Route::get('category_checkbox','category_checkbox')->name('category_checkbox');
+});
+Route::controller(CartJqueryController::class)->group(function(){
+ // CART AJAX
     Route::get('add-to-cart','addToCart')->name('add.to.cart');
     Route::post('update-cart','update')->name('update.cart');
     Route::get('remove-from-cart','remove')->name('remove.from.cart');
-    // WISH AJAX
+// WISH AJAX
     Route::get('add-to-wish/{id}','addToCart')->name('add.to.wish');
 });
 

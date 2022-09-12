@@ -45,12 +45,6 @@
             add to
             cart</button>
     </div>
-    {{-- <div class="add-to-cart">
-        <a class="btn btn add-to-cart-btn add" href="{{ route('add.to.cart', $item->id) }}"><i
-                class="fa fa-shopping-cart"></i>
-            add to
-            cart</a>
-    </div> --}}
 </div>
 
 @section('layouts_product_scripts')
@@ -59,7 +53,7 @@
             $(".btn_wish").click(function() {
                 let id = $(this).attr("value");
                 $(this).attr("class", "fa fa-heart btn_wish");
-
+                console.log(id);
             });
         });
 

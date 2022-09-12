@@ -293,7 +293,7 @@
             let new_price = response.price * response.quantity;
             $(".pro_price").html(new_price);
 
-            let response2 = response1[1];
+                let response2 = response1[1];
                 let sum1 = 0
                 let link = "{{ asset('images/') }}"
                 let all_text = ''
@@ -319,23 +319,22 @@
             quantity : $(".pro_qty input").val()
         }
         $.get('{{ route('add.to.cart') }}', data, function(response){
-            let sum = 0
+                let sum1 = 0
                 let link = "{{ asset('images/') }}"
                 let all_text = ''
 
                 $.each(response, function($key, $element) {
-                    sum++;
+                    sum1++;
                     text = ''
                     text += '<div class="product-widget"> <div class="product-img"><img src='+link
                     text += '/' + $element.image + ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">'+ $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element .quantity + 'x </span> $' + $element.price + '</h4></div></div>'
                     all_text = text + all_text
                 });
+                console.log(sum1);
                 $('.cart-list').html(all_text)
-                $(".cart_qty").html(sum);
+                $(".cart_qty").html(sum1);
         });
     })
    </script>
    @endsection
-
-
 @endsection

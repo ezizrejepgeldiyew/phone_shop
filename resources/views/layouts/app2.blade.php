@@ -17,9 +17,7 @@
 </head>
 
 <body>
-    <!-- HEADER -->
     <header>
-        <!-- TOP HEADER -->
         <div id="top-header">
             <div class="container">
                 <ul class="header-links pull-left">
@@ -44,11 +42,9 @@
                 </ul>
             </div>
         </div>
-        <!-- /TOP HEADER -->
         <div id="header">
             <div class="container">
                 <div class="row">
-                    <!-- LOGO -->
                     <div class="col-md-3">
                         <div class="header-logo">
                             <a href="#" class="logo">
@@ -56,27 +52,22 @@
                             </a>
                         </div>
                     </div>
-                    <!-- /LOGO -->
-
-                    <!-- SEARCH BAR -->
                     <div class="col-md-6">
                         <div class="header-search">
                             <form>
-                                <select class="input-select">
-                                    <option value="0">All Categories</option>
+                                <select class="input-select searchh">
+                                    <option>All Categories</option>
                                     @foreach ($category as $key => $value)
                                         <option value="{{ $key + 1 }}">{{ $value->name }}</option>
                                     @endforeach
                                 </select>
-                                <input class="input" placeholder="Search here">
+                                <input class="input" id="txtSearch" placeholder="Search here">
                                 <button class="search-btn">Search</button>
                             </form>
                         </div>
                     </div>
-                    <!-- /SEARCH BAR -->
                     <div class="col-md-3 clearfix">
                         <div class="header-ctn">
-                            <!-- Wishlist -->
                             <div class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-heart"></i>
@@ -118,9 +109,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /Wishlist -->
-
-                            <!-- Cart -->
                             <div class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-shopping-cart"></i>
@@ -162,7 +150,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /Cart -->
 
                         </div>
                     </div>
@@ -170,9 +157,7 @@
             </div>
         </div>
     </header>
-    <!-- /HEADER -->
 
-    <!-- NAVIGATION -->
     <nav id="navigation">
         <div class="container">
             <div id="responsive-nav">
@@ -187,7 +172,6 @@
             </div>
         </div>
     </nav>
-    <!-- /NAVIGATION -->
 
 
 
@@ -195,7 +179,6 @@
 
     @include('layouts.blank')
 
-    <!-- FOOTER -->
     <footer id="footer">
         <!-- top footer -->
         <div class="section">
@@ -293,10 +276,14 @@
         </div>
         <!-- /bottom footer -->
     </footer>
-    <!-- /FOOTER -->
 
 
-    <!-- jQuery Plugins -->
+    <script>
+        $(".searchh").click(function(){
+            let id = $(this).val();
+            console.log(id);
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="{{ asset('js1/jquery.min.js') }}"></script>
     <script src="{{ asset('js1/bootstrap.min.js') }}"></script>
@@ -307,6 +294,7 @@
     @yield('layouts_product_scripts')
     @yield('cart_scripts')
     @yield('product_scripts')
+    @yield('store_checkbox')
 </body>
 
 </html>
