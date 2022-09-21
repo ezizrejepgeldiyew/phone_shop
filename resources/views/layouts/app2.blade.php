@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Electro - HTML Ecommerce Template</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <link href="netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="{{ asset('css1/bootstrap.min.css') }}" />
     <link type="text/css" rel="stylesheet" href="{{ asset('css1/slick.css') }}" />
     <link type="text/css" rel="stylesheet" href="{{ asset('css1/slick-theme.css') }}" />
@@ -26,7 +27,11 @@
                     <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
                 </ul>
                 <ul class="header-links pull-right">
-                    <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+                    <li>  <select class="form-control changeLang">
+                        <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
+                        <option value="fr" {{ session()->get('locale') == 'fr' ? 'selected' : '' }}>France</option>
+                        <option value="sp" {{ session()->get('locale') == 'sp' ? 'selected' : '' }}>Spanish</option>
+                    </select></li>
                     @guest
                         <li><a href="{{ route('login') }}"><i class="fa fa-user-o"></i> Login</a></li>
                         <li><a href="{{ route('register') }}"><i class="fa fa-user-o"></i> Register</a></li>
@@ -278,12 +283,7 @@
     </footer>
 
 
-    <script>
-        $(".searchh").click(function(){
-            let id = $(this).val();
-            console.log(id);
-        });
-    </script>
+    
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="{{ asset('js1/jquery.min.js') }}"></script>
     <script src="{{ asset('js1/bootstrap.min.js') }}"></script>

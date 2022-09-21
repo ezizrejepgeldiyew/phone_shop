@@ -125,8 +125,10 @@
                 let sum = 0
                 let link = "{{ asset('images/') }}"
                 let all_text = ''
+                let total = 0
 
                 $.each(response, function($key, $element) {
+                    total = total + ($element.quantity * $element.price)
                     sum++;
                     text = ''
                     text += '<div class="product-widget"> <div class="product-img"><img src='+link
@@ -135,6 +137,7 @@
                 });
                 $('.cart-list').html(all_text)
                 $(".cart_qty").html(sum);
+                $(".pro_total").html(total);
             });
         });
     </script>

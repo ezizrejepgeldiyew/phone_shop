@@ -33,6 +33,7 @@ Route::controller(IndexController::class)->group(function(){
     Route::post('review/{product}','review')->name('review');
     Route::get('search','search')->name('search');
     Route::get('category_checkbox','category_checkbox')->name('category_checkbox');
+    Route::post('price-filter','price')->name('price.filter');
 });
 Route::controller(CartJqueryController::class)->group(function(){
  // CART AJAX
@@ -40,7 +41,7 @@ Route::controller(CartJqueryController::class)->group(function(){
     Route::post('update-cart','update')->name('update.cart');
     Route::get('remove-from-cart','remove')->name('remove.from.cart');
 // WISH AJAX
-    Route::get('add-to-wish/{id}','addToCart')->name('add.to.wish');
+    Route::get('add-to-wish','addToWish')->name('add.to.wish');
 });
 
 

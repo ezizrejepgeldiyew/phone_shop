@@ -11,7 +11,8 @@
 
                             @foreach ($category as $key => $value)
                                 <div class="input-checkbox">
-                                    <input type="checkbox" class="category_checkbox" value="{{ $value->id }}" id="category-{{ $key }}">
+                                    <input type="checkbox" class="category_checkbox" value="{{ $value->id }}"
+                                        id="category-{{ $key }}">
                                     <label for="category-{{ $key }}">
                                         <span></span>
                                         {{ $value->name }}
@@ -27,10 +28,10 @@
                     <div class="aside">
                         <h3 class="aside-title">Price</h3>
                         <div class="price-filter">
-                            <div id="price-slider"></div>
-                            <input type="number" id="price-min" class="form-control input-number price-max" />
+
+                            <input type="number" id="price-min" class="form-control input-number price-max" value="0">
                             <span>-</span>
-                            <input type="number" id="price-max" class="form-control input-number price-max" />
+                            <input type="number" id="price-max" class="form-control input-number price-max" value="100000">
                         </div>
                     </div>
 
@@ -115,74 +116,44 @@
             </div>
         </div>
     </div>
-    @section('store_checkbox')
+@section('store_checkbox')
     <script>
-        $(document).ready(function(){
-            $('#txtSearch').on('keyup',function(){
+        $(document).ready(function() {
+            $('#txtSearch').on('keyup', function() {
                 var text = $("#txtSearch").val();
                 let data = {
-                    _token : "{{ csrf_token() }}",
-                    text : text
+                    _token: "{{ csrf_token() }}",
+                    text: text
                 }
-                let link = "{{ asset('images/') }}"
 
-                $.get('{{ route('search') }}', data, function(response){
-
-
+                $.get('{{ route('search') }}', data, function(response) {
                     let all_txt = ''
-                    $.each(response,function($key,$item){
-                        text = ''
-                        text +='<div class="col-md-4 col-xs-6"><div class="product wishlist"><div class="product-img"><img src='+link
-                        text +='/'+ $item.photo +' alt=""> <div class="product-label">'
-                        text +='</div></div><div class="product-body"><p class="product-category">'+ $item.category.name+'</p>'
-                        text +='<h3 class="product-name"><a href="#">'+ $item.name+'</a></h3>'
-                        text +='<h4 class="product-price">'+ $item.price +' TMT</h4> <div class="product-btns"> <button class="fa fa-heart-o btn_wish" value="'+ $item.id +'" id="result" type="submit"></i><span class="tooltipp">add to wishlist</span></button>'
-                        text +='<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button> <button class="quick-view"><a href="{{ route('product1', ['product' => '+$item.id+']) }}"><i class="fa fa-eye"></i></a><span class="tooltipp">quick view</span></button>'
-                        text +='</div></div> <div class="add-to-cart" id="cart'+ $item.id +'" data-id="'+ $item.id +'"><button class="add-to-cart-btn addtocart"><i class="fa fa-shopping-cart"></i>add to cart</button></div></div></div>'
-                        console.log(text);
-                        all_txt = all_txt + text
+                    $.each(response, function($key, $item) {
+                        all_txt = all_txt + GetHtmlBlade($item)
                     });
                     $(".hii").html(all_txt);
                 })
-
-
             });
-
-            $('input[type="checkbox"]').click(function(){
+            $('input[type="checkbox"]').click(function() {
                 var arr_id = [];
-                $(":checkbox:checked").each(function(i){
+                $(":checkbox:checked").each(function(i) {
                     arr_id[i] = $(this).val();
                 });
-                if(arr_id.length == 0)
-                {
+                if (arr_id.length == 0) {
                     arr_id = null
                 }
-
-
                 data = {
-                    _token : "{{ csrf_token() }}",
-                    id : arr_id
+                    _token: "{{ csrf_token() }}",
+                    id: arr_id
                 }
+                $.get('{{ route('category_checkbox') }}', data, function(response) {
 
-                $.get('{{ route('category_checkbox') }}', data, function(response){
-                    console.log(response);
                     let len = response.length
                     let all_txt = ''
-                    let link = "{{ asset('images/') }}"
                     for (let i = 0; i < len; i++) {
-                        if(response[i].length != 0){
-                            $.each(response[i],function($key,$item){
-
-                                text = ''
-                                text +='<div class="col-md-4 col-xs-6"><div class="product wishlist"><div class="product-img"><img src='+link
-                                text +='/'+ $item.photo +' alt=""> <div class="product-label">'
-                                text +='</div></div><div class="product-body"><p class="product-category">'+ $item.category.name+'</p>'
-                                text +='<h3 class="product-name"><a href="#">'+ $item.name+'</a></h3>'
-                                text +='<h4 class="product-price">'+ $item.price +' TMT</h4> <div class="product-btns"> <button class="fa fa-heart-o btn_wish" value="'+ $item.id +'" id="result" type="submit"></i><span class="tooltipp">add to wishlist</span></button>'
-                                text +='<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button> <button class="quick-view"><a href="{{ route('product1', ['product' => '+ $item.id +']) }}"><i class="fa fa-eye"></i></a><span class="tooltipp">quick view</span></button>'
-                                text +='</div></div> <div class="add-to-cart" id="cart'+ $item.id +'" data-id="'+ $item.id +'"><button class="add-to-cart-btn addtocart"><i class="fa fa-shopping-cart"></i>add to cart</button></div></div></div>'
-
-                                all_txt = all_txt + text
+                        if (response[i].length != 0) {
+                            $.each(response[i], function($key, $item) {
+                                all_txt = all_txt + GetHtmlBlade($item)
                             });
                             $(".hii").html(all_txt);
                         }
@@ -190,17 +161,55 @@
                     }
                 });
             });
-
             const rangeInput = document.querySelectorAll(".price-filter input");
-            rangeInput.forEach(input =>{
-                input.addEventListener("input", ()=>{
+            rangeInput.forEach(input => {
+                input.addEventListener("input", () => {
                     let minVal = parseInt(rangeInput[0].value),
                         maxVal = parseInt(rangeInput[1].value);
-                    console.log(minVal, maxVal);
+                    let data = {
+                        _token: "{{ csrf_token() }}",
+                        minVal: minVal,
+                        maxVal: maxVal
+                    }
+
+                    $.post('{{ route('price.filter') }}', data, function(response) {
+                        let all_txt = ''
+                        $.each(response, function($key, $item) {
+                            all_txt = all_txt + GetHtmlBlade($item)
+                        });
+                        $(".hii").html(all_txt);
+                    });
                 });
             });
         });
+        function GetHtmlBlade($item) {
+            url = "{{ url('product1') }}/" + $item.id
+            let link = "{{ asset('images/') }}"
+            text = ''
+            all_txt = ''
+            text +=
+                '<div class="col-md-4 col-xs-6"><div class="product wishlist"><div class="product-img"><img src=' +
+                link
+            text += '/' + $item.photo +
+                ' alt=""> <div class="product-label">'
+            text +=
+                '</div></div><div class="product-body"><p class="product-category">' +
+                $item.category.name + '</p>'
+            text += '<h3 class="product-name"><a href="#">' + $item
+                .name + '</a></h3>'
+            text += '<h4 class="product-price">' + $item.price +
+                ' TMT</h4> <div class="product-btns"> <button class="fa fa-heart-o btn_wish" value="' +
+                $item.id +
+                '" id="result" type="submit"></i><span class="tooltipp">add to wishlist</span></button>'
+            text +=
+                '<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button> <button class="quick-view"><a href="' +
+                url + '"><i class="fa fa-eye"></i></a><span class="tooltipp">quick view</span></button>'
+            text += '</div></div> <div class="add-to-cart" id="cart' +
+                $item.id + '" data-id="' + $item.id +
+                '"><button class="add-to-cart-btn addtocart" onclick="myCartFunction('+$item.id+')"><i class="fa fa-shopping-cart"></i>add to cart</button></div></div></div>'
+            all_txt = all_txt + text
+            return all_txt
+        }
     </script>
-    @endsection
 @endsection
-
+@endsection

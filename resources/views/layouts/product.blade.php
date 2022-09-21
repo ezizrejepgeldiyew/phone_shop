@@ -31,7 +31,7 @@
             @endfor
         </div>
         <div class="product-btns">
-            <button class="fa fa-heart-o btn_wish" value="{{ $item->id }}" id="result" type="submit"></i>
+            <button class="fa fa-heart-o" onclick="myWishFunction({{ $item->id }})" type="submit"></i>
                 <span class="tooltipp">add to
                     wishlist</span></button>
             <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to
@@ -41,7 +41,8 @@
         </div>
     </div>
     <div class="add-to-cart" id="cart{{ $item->id }}" data-id="{{ $item->id }}">
-        <button class="add-to-cart-btn addtocart"><i class="fa fa-shopping-cart"></i>
+        <button class="add-to-cart-btn" onclick="myCartFunction({{ $item->id }})"><i
+                class="fa fa-shopping-cart"></i>
             add to
             cart</button>
     </div>
@@ -49,19 +50,9 @@
 
 @section('layouts_product_scripts')
     <script>
-        $(function() {
-            $(".btn_wish").click(function() {
-                let id = $(this).attr("value");
-                $(this).attr("class", "fa fa-heart btn_wish");
-                console.log(id);
-            });
-        });
-
-        $(".addtocart").click(function(e) {
-            e.preventDefault();
-            var ele = $(this);
+        function myCartFunction(id) {
             let data = {
-                id: ele.parents("div").attr("data-id"),
+                id: id,
                 _token: "{{ csrf_token() }}"
             }
 
@@ -73,14 +64,25 @@
                 $.each(response, function($key, $element) {
                     sum++;
                     text = ''
-                    text += '<div class="product-widget"> <div class="product-img"><img src='+link
-                    text += '/' + $element.image + ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">'+ $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element .quantity + 'x </span> $' + $element.price + '</h4></div></div>'
+                    text += '<div class="product-widget"> <div class="product-img"><img src=' + link
+                    text += '/' + $element.image +
+                        ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">' +
+                        $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' +
+                        $element.quantity + 'x </span> $' + $element.price + '</h4></div></div>'
                     all_text = text + all_text
                 });
                 $('.cart-list').html(all_text)
                 $(".cart_qty").html(sum);
-
             });
-        });
+        }
+        function myWishFunction(id){
+            data = {
+                id : id,
+                _token : "{{ csrf_token() }}"
+            }
+            $.get('route('add.to.wish')',data,function(response){
+                console.log(response);
+            });
+        }
     </script>
 @endsection

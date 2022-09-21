@@ -95,16 +95,12 @@
                         <div id="slick-nav-1" class="products-slick-nav"></div>
                     </div>
                     @endforeach
-                    <!-- /tab -->
 
                 </div>
             </div>
         </div>
-        <!-- Products tab & slick -->
     </div>
-    <!-- /SECTION -->
 
-    <!-- HOT DEAL SECTION -->
     <div id="hot-deal" class="section">
         <!-- container -->
         <div class="container">
@@ -148,14 +144,11 @@
         </div>
         <!-- /container -->
     </div>
-    <!-- /HOT DEAL SECTION -->
 
-    <!-- SECTION -->
     <div class="section">
         <div class="container">
             <div class="row">
 
-                <!-- section title -->
                 <div class="col-md-12">
                     <div class="section-title">
                         <h3 class="title">Top selling</h3>
@@ -170,37 +163,26 @@
                         </div>
                     </div>
                 </div>
-                <!-- /section title -->
 
-                <!-- Products tab & slick -->
                 <div class="col-md-12">
                     <div class="row">
                         <div class="products-tabs">
-                            <!-- tab -->
                             @foreach ($category as $key => $value)
                                 <div id="tab1{{ $key }}" class="tab-pane fade in @if ($key==0) active @endif">
                                     <div class="products-slick" data-nav="#slick-nav-2">
                                         @foreach ($product as $item)
                                             @if ($item->category_id == $value->id)
-
                                                 @include('layouts.product')
-
                                             @endif
-
                                         @endforeach
                                     </div>
                                     <div id="slick-nav-2" class="products-slick-nav"></div>
                                 </div>
                             @endforeach
-                            <!-- /tab -->
                         </div>
                     </div>
                 </div>
-                <!-- /Products tab & slick -->
             </div>
         </div>
     </div>
-    <!-- /SECTION -->
-
-
 @endsection

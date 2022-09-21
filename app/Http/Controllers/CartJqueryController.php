@@ -79,4 +79,9 @@ class CartJqueryController extends Controller
         }
         return response()->json($cart,200);
     }
+
+    public function addToWish()
+    {
+        
+    }
 }

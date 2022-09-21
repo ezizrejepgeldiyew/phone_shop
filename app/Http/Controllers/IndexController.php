@@ -92,7 +92,11 @@ class IndexController extends Controller
     public function search(Request $request)
     {
         $text = $request->input('text');
-        $search = product::where('name','Like',"%$text%")->orwhere('ourbrand_id','Like',"%$text%")->with('category')->get();
+
+        $search = product::whereHas('ourbrand', function($query) use($text)
+        {
+            $query->where('name','Like',"%$text%");
+        })->orWhere('name','Like',"%$text%")->with('category')->get();
         return response()->json($search,200);
     }
 
@@ -115,4 +119,11 @@ class IndexController extends Controller
         return response()->json($cart1,200);
     }
 
+    public function price(Request $request)
+    {
+        $minVal = (int)$request->minVal;
+        $maxVal = (int)$request->maxVal;
+        $data = product::where('price','>=',$minVal)->where('price','<=',$maxVal)->with('category')->get();
+        return response()->json($data,200);
+    }
 }

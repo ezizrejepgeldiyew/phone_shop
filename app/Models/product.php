@@ -58,4 +58,15 @@ class product extends Model
         }
         return null;
     }
+
+    public function scopeName($query,$text)
+    {
+        return $query->where('name','Like',"%$text%");
+    }
+
+    public function scopeBrand($query,$text)
+    {
+        return ourbrand::where('name','Like',"%$text%");
+    }
+
 }

@@ -31,4 +31,5 @@ class ourbrand extends Model
         }
         return null;
     }
+
 }
