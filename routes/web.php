@@ -44,16 +44,18 @@ Route::controller(CartJqueryController::class)->group(function(){
     Route::get('add-to-wish','addToWish')->name('add.to.wish');
 });
 
-
-Route::resources([
-    'category' => CategoryController::class,
-    'ourbrand' => OurBrandController::class,
-    'country' => CountryController::class,
-    'product' => ProductController::class,
-    'kuriyent' => KuriyentController::class,
-]);
-
-
 Auth::routes();
+Route::middleware(['admin'])->group(function () {
+    Route::resources([
+        'category' => CategoryController::class,
+        'ourbrand' => OurBrandController::class,
+        'country' => CountryController::class,
+        'product' => ProductController::class,
+        'kuriyent' => KuriyentController::class,
+    ]);
+});
+
+
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

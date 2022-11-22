@@ -52,7 +52,8 @@
                             <a class="review-link" href="#">{{ $all }} Review(s)</a>
                         </div>
                         <div>
-                                <h3 class="product-price"><span class="pro_price" value="{{ $product->price }}">{{ $product->price}}</span> TMT</h3>
+                            <h3 class="product-price"><span class="pro_price"
+                                    value="{{ $product->price }}">{{ $product->price }}</span> TMT</h3>
                         </div>
                         <p>{{ $product->description }}</p>
 
@@ -67,13 +68,15 @@
                             </label>
                             <label class="pro_qty">
                                 Qty
-                                <input type="number" value="{{ $cart }}" class="form-control quantity update-cart" />
+                                <input type="number" value="{{ $cart }}"
+                                    class="form-control quantity update-cart" />
                             </label>
                         </div>
 
                         <div class="add-to-cart">
 
-                            <button class="add-to-cart-btn addtocart"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                            <button class="add-to-cart-btn addtocart"><i class="fa fa-shopping-cart"></i> add to
+                                cart</button>
                         </div>
                         <ul class="product-btns">
                             <li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
@@ -161,7 +164,8 @@
                                                                     $t = 1;
                                                                 @endphp
                                                                 <div class="rating-progress">
-                                                                    <div style="width: {{ (100 * $value) / $all }}%;"></div>
+                                                                    <div style="width: {{ (100 * $value) / $all }}%;">
+                                                                    </div>
                                                                 </div>
                                                                 <span class="sum">{{ $value }}</span>
                                                             @endif
@@ -270,71 +274,68 @@
         </div>
     </div>
 
-   @section('product_scripts')
-   <script>
-    $(".update-cart").change(function(e){
-        e.preventDefault();
-        var ele = $(this);
-        let quantity = $(".pro_qty input").val();
-        let id = ele.parents(".product-details").attr("data-id");
-        let data = {
-            _token : "{{ csrf_token() }}",
-            id : id,
-            quantity : quantity
-        }
-        $.post('{{ route('update.cart') }}', data, function(response1){
-
-            if (response1 == false) {
-                let price = parseInt($(".pro_price").attr("value")) * quantity;
-                $(".pro_price").html(price);
+@section('product_scripts')
+    <script>
+        $(".update-cart").change(function() {
+            var ele = $(this);
+            let quantity = $(".pro_qty input").val();
+            let id = ele.parents(".product-details").attr("data-id");
+            let data = {
+                _token: "{{ csrf_token() }}",
+                id: id,
+                quantity: quantity
             }
+            $.post('{{ route('update.cart') }}', data, function(response1) {
 
-            let response = response1[0];
-            let new_price = response.price * response.quantity;
-            $(".pro_price").html(new_price);
+                if (response1 == false) {
+                    let price = parseInt($(".pro_price").attr("value")) * quantity;
+                    $(".pro_price").html(price);
+                }
+
+                let response = response1[0];
+                let new_price = response.price * response.quantity;
+                $(".pro_price").html(new_price);
 
                 let response2 = response1[1];
-                let sum1 = 0
-                let link = "{{ asset('images/') }}"
+                let sum1 = response2.length
                 let all_text = ''
                 $.each(response2, function($key, $element) {
-                    sum1++;
-                    text = ''
-                    text += '<div class="product-widget"> <div class="product-img"><img src='+link
-                    text += '/' + $element.image + ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">'+ $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element .quantity + 'x </span> $' + $element.price + '</h4></div></div>'
-                    all_text = text + all_text
+                    all_text = all_text + GetHtmlBlade($element)
                 });
                 $('.cart-list').html(all_text)
                 $(".cart_qty").html(sum1);
+            });
+
         });
 
-    });
-
-    $(".addtocart").click(function(e){
-        e.preventDefault();
-        var ele = $(this);
-        let data = {
-            _token : "{{ csrf_token() }}",
-            id : ele.parents(".product-details").attr("data-id"),
-            quantity : $(".pro_qty input").val()
-        }
-        $.get('{{ route('add.to.cart') }}', data, function(response){
-                let sum1 = 0
-                let link = "{{ asset('images/') }}"
+        $(".addtocart").click(function() {
+            var ele = $(this);
+            let data = {
+                _token: "{{ csrf_token() }}",
+                id: ele.parents(".product-details").attr("data-id"),
+                quantity: $(".pro_qty input").val()
+            }
+            $.get('{{ route('add.to.cart') }}', data, function(response) {
+                let sum1 = response2.length
                 let all_text = ''
 
                 $.each(response, function($key, $element) {
-                    sum1++;
-                    text = ''
-                    text += '<div class="product-widget"> <div class="product-img"><img src='+link
-                    text += '/' + $element.image + ' alt="" ></div> <div class="product-body" ><h3 class="product-name"> <a href="#">'+ $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element .quantity + 'x </span> $' + $element.price + '</h4></div></div>'
-                    all_text = text + all_text
+                    all_text = all_text + GetHtmlBlade($element)
                 });
-                console.log(sum1);
                 $('.cart-list').html(all_text)
                 $(".cart_qty").html(sum1);
-        });
-    })
-   </script>
-   @endsection
+            });
+        })
+
+        function GetHtmlBlade($element) {
+            let link = "{{ asset('images/') }}"
+            text = ''
+            text += '<div class="product-widget"> <div class="product-img"><img src=' + link
+            text += '/' + $element.image + '></div> <div class="product-body" ><h3 class="product-name"> <a href="#">' +
+                $element.name + '</a> </h3 ><h4 class="product-price"><span class="qty"> ' + $element.quantity +
+                'x </span> $' + $element.price + '</h4></div></div>'
+            return text
+        }
+    </script>
+@endsection
 @endsection

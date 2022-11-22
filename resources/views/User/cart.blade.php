@@ -73,8 +73,7 @@
     </div>
     @section('cart_scripts')
     <script>
-        $(".update-cart").change(function(e) {
-            e.preventDefault();
+        $(".update-cart").change(function() {
             var ele = $(this);
             let data = {
                 id: ele.parents("tr").attr("data-id"),
@@ -83,7 +82,6 @@
             }
             $.post('{{ route('update.cart') }}', data, function(response1) {
                 let response = response1[0];
-
                 let iid = ".prod" + response.id;
                 $(iid).html(response.price * response.quantity);
                 let elements = document.getElementsByClassName("product");
@@ -110,8 +108,7 @@
             });
         });
 
-        $(".remove-from-cart").click(function(e) {
-            e.preventDefault();
+        $(".remove-from-cart").click(function() {
             var ele = $(this);
 
             let data = {

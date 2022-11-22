@@ -15,12 +15,8 @@ class CartJqueryController extends Controller
         } else {
             $quantity = request('quantity');
         }
-
-
         $product = product::findOrFail($id);
-
         $cart = session()->get('cart', []);
-
         if (isset($cart[$id])) {
             $cart[$id]['quantity']++;
         } else {
@@ -35,9 +31,7 @@ class CartJqueryController extends Controller
                 "rating" => $product->rating
             ];
         }
-
         session()->put('cart', $cart);
-
         return response()->json($cart,200);
     }
 
@@ -82,6 +76,26 @@ class CartJqueryController extends Controller
 
     public function addToWish()
     {
-        
+        $id = request('id');
+        $product = product::findOrFail($id);
+        $wish = session()->get('wish',[]);
+        if(isset($wish[$id]))
+        {
+            unset($wish[$id]);
+        }else
+        {
+            $wish[$id] = [
+                "id" => $id,
+                "name" => $product->name,
+                "quantity" => $product->quantity,
+                "price" => $product->price,
+                "image" => $product->photo,
+                "created_at" => $product->created_at,
+                "discount" => $product->discount,
+                "rating" => $product->rating
+            ];
+        }
+        session()->put('wish',$wish);
+        return response()->json($wish,200);
     }
 }

@@ -27,19 +27,24 @@
                     <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
                 </ul>
                 <ul class="header-links pull-right">
-                    <li>  <select class="form-control changeLang">
-                        <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
-                        <option value="fr" {{ session()->get('locale') == 'fr' ? 'selected' : '' }}>France</option>
-                        <option value="sp" {{ session()->get('locale') == 'sp' ? 'selected' : '' }}>Spanish</option>
-                    </select></li>
+                    <li> <select class="form-control changeLang">
+                            <option value="en" {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English
+                            </option>
+                            <option value="fr" {{ session()->get('locale') == 'fr' ? 'selected' : '' }}>France
+                            </option>
+                            <option value="sp" {{ session()->get('locale') == 'sp' ? 'selected' : '' }}>Spanish
+                            </option>
+                        </select></li>
                     @guest
                         <li><a href="{{ route('login') }}"><i class="fa fa-user-o"></i> Login</a></li>
                         <li><a href="{{ route('register') }}"><i class="fa fa-user-o"></i> Register</a></li>
                     @endguest
                     @auth
                         <li>
+                            <a href="{{ route('category.create') }}"><i class="fa fa-user"></i>{{ Auth::user()->name }}</a>
+                        </li>
+                        <li>
                             <form action="{{ route('logout') }}" method="post"> @csrf
-                                <i class="fa fa-user"></i>
                                 <button type="submit">Logout</button>
                             </form>
                         </li>
@@ -73,20 +78,15 @@
                     </div>
                     <div class="col-md-3 clearfix">
                         <div class="header-ctn">
+                            {{-- Wishlist --}}
                             <div class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-heart"></i>
                                     <span>Your Wish</span>
-                                    <div class="qty">{{ count((array) session('wish')) }}</div>
+                                    <div class="qty"><span class="wish_qty">{{ count((array) session('wish')) }}</span></div>
                                 </a>
                                 <div class="cart-dropdown show_cart">
                                     <div class="cart-list1">
-
-                                        @php $total = 0 @endphp
-                                        @foreach ((array) session('wish') as $id => $details)
-                                            @php $total += $details['price'] * $details['quantity'] @endphp
-                                        @endforeach
-
                                         @if (session('wish'))
                                             @foreach (session('wish') as $id => $details)
                                                 <div class="product-widget">
@@ -95,30 +95,24 @@
                                                             alt="">
                                                     </div>
                                                     <div class="product-body">
-                                                        <h3 class="product-name"><a
-                                                                href="#">{{ $details['name'] }}</a></h3>
-                                                        <h4 class="product-price"><span
-                                                                class="qty">{{ $details['quantity'] }}x</span>${{ $details['price'] }}
-                                                        </h4>
+                                                        <h3 class="product-name">{{ $details['name'] }}</h3>
                                                     </div>
                                                 </div>
                                             @endforeach
                                         @endif
                                     </div>
-                                    <div class="cart-summary">
-                                        <h5>Jemi {{ $total }} TMT</h5>
-                                    </div>
                                     <div class="cart-btns">
                                         <a href="{{ route('cart') }}">View Cart</a>
-                                        <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
                                 </div>
                             </div>
+                            {{-- Cart --}}
                             <div class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span>Your Cart</span>
-                                    <div class="qty"><span class="cart_qty">{{ count((array) session('cart')) }}</span></div>
+                                    <div class="qty"><span
+                                            class="cart_qty">{{ count((array) session('cart')) }}</span></div>
                                 </a>
                                 <div class="cart-dropdown show_cart">
                                     <div class="cart-list">
@@ -136,8 +130,7 @@
                                                             alt="">
                                                     </div>
                                                     <div class="product-body">
-                                                        <h3 class="product-name"><a
-                                                                href="#">{{ $details['name'] }}</a></h3>
+                                                        <h3 class="product-name">{{ $details['name'] }}</h3>
                                                         <h4 class="product-price"><span
                                                                 class="qty">{{ $details['quantity'] }}x</span>${{ $details['price'] }}
                                                         </h4>
@@ -151,7 +144,7 @@
                                     </div>
                                     <div class="cart-btns">
                                         <a href="{{ route('cart') }}">View Cart</a>
-                                        <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+                                        <a href="{{ route('checkout') }}">Checkout <i class="fa fa-arrow-circle-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -283,7 +276,7 @@
     </footer>
 
 
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="{{ asset('js1/jquery.min.js') }}"></script>
     <script src="{{ asset('js1/bootstrap.min.js') }}"></script>
